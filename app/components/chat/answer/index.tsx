@@ -3,16 +3,17 @@ import type { FC } from 'react'
 import React from 'react'
 import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from 'react-i18next'
+import type { ChatItem, MessageRating, VisionFile } from '@/types/app'
+import { randomString } from '@/utils/string'
+import Tooltip from '@/app/components/base/tooltip'
+import { Markdown } from '@/app/components/base/markdown'
+import ImageGallery from '../../base/image-gallery'
+import WorkflowProcess from '@/app/components/workflow/workflow-process'
+import Citation from '../citation'
 import LoadingAnim from '../loading-anim'
 import type { FeedbackFunc } from '../type'
 import s from '../style.module.css'
-import ImageGallery from '../../base/image-gallery'
 import Thought from '../thought'
-import { randomString } from '@/utils/string'
-import type { ChatItem, MessageRating, VisionFile } from '@/types/app'
-import Tooltip from '@/app/components/base/tooltip'
-import WorkflowProcess from '@/app/components/workflow/workflow-process'
-import { Markdown } from '@/app/components/base/markdown'
 import type { Emoji } from '@/types/tools'
 
 const OperationBtn = ({ innerContent, onClick, className }: { innerContent: React.ReactNode; onClick?: () => void; className?: string }) => (
@@ -140,6 +141,17 @@ const Answer: FC<IAnswerProps> = ({
     return list.filter(file => file.type === 'image' && file.belongs_to === 'assistant')
   }
 
+  const renderCitations = () => {
+    if (!item.citation || item.citation.length === 0)
+      return null
+
+    // Use the dedicated Citation component instead of inline implementation
+    return <Citation
+      data={item.citation}
+      containerClassName={s.answerWrap}
+    />
+  }
+
   const agentModeAnswer = (
     <div>
       {agent_thoughts?.map((item, index) => (
@@ -190,7 +202,10 @@ const Answer: FC<IAnswerProps> = ({
                 : (isAgentMode
                   ? agentModeAnswer
                   : (
-                    <Markdown content={content} />
+                    <>
+                      <Markdown content={content} />
+                      {renderCitations()}
+                    </>
                   ))}
             </div>
             <div className='absolute top-[-14px] right-[-14px] flex flex-row justify-end gap-1'>

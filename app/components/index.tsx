@@ -505,8 +505,8 @@ const Main: FC<IMainProps> = () => {
           setChatList(newListWithAnswer)
           return
         }
-        // not support show citation
-        // responseItem.citation = messageEnd.retriever_resources
+        // Add citations from retriever resources
+        responseItem.citation = messageEnd.metadata?.retriever_resources
         const newListWithAnswer = produce(
           getChatList().filter(item => item.id !== responseItem.id && item.id !== placeholderAnswerId),
           (draft) => {

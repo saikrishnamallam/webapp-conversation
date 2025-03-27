@@ -55,9 +55,15 @@ export type MessageMore = {
   latency: number | string
 }
 
+export type CitationItem = {
+  content: string
+  document_name: string
+}
+
 export type IChatItem = {
   id: string
   content: string
+  citation?: CitationItem[]
   /**
    * Specific message type
    */

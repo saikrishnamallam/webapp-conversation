@@ -1,20 +1,21 @@
-import type { VisionFile } from '@/types/app'
+import type { VisionFile, WorkflowProcess } from '@/types/app'
+
+export type LogRole = 'human' | 'ai' | 'tool' | 'function'
 
 export type LogAnnotation = {
-  content: string
-  account: {
-    id: string
-    name: string
-    email: string
-  }
-  created_at: number
+  type: string
+  text: string
+}
+
+export type LogItem = {
+  role: LogRole
+  text: string
+  annotations?: LogAnnotation[]
 }
 
 export type Annotation = {
   id: string
   authorName: string
-  logAnnotation?: LogAnnotation
-  created_at?: number
 }
 
 export const MessageRatings = ['like', 'dislike', null] as const
@@ -23,12 +24,12 @@ export type MessageRating = typeof MessageRatings[number]
 export type MessageMore = {
   time: string
   tokens: number
-  latency: number | string
+  latency: number
 }
 
 export type Feedbacktype = {
   rating: MessageRating
-  content?: string | null
+  content?: string
 }
 
 export type FeedbackFunc = (messageId: string, feedback: Feedbacktype) => Promise<any>
@@ -57,17 +58,18 @@ export type ThoughtItem = {
 
 export type CitationItem = {
   content: string
-  data_source_type: string
-  dataset_name: string
-  dataset_id: string
-  document_id: string
   document_name: string
-  hit_count: number
-  index_node_hash: string
-  segment_id: string
-  segment_position: number
-  score: number
-  word_count: number
+  // Extended properties to match Dify's structure
+  data_source_type?: string
+  dataset_name?: string
+  dataset_id?: string
+  document_id?: string
+  hit_count?: number
+  index_node_hash?: string
+  segment_id?: string
+  segment_position?: number
+  score?: number
+  word_count?: number
 }
 
 export type IChatItem = {
@@ -98,9 +100,10 @@ export type IChatItem = {
   useCurrentUserAvatar?: boolean
   isOpeningStatement?: boolean
   suggestedQuestions?: string[]
-  log?: { role: string; text: string }[]
+  log?: LogItem[]
   agent_thoughts?: ThoughtItem[]
   message_files?: VisionFile[]
+  workflowProcess?: WorkflowProcess
 }
 
 export type MessageEnd = {

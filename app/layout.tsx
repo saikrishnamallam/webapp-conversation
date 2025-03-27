@@ -1,25 +1,30 @@
-import { getLocaleOnServer } from '@/i18n/server'
-
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './styles/globals.css'
-import './styles/markdown.scss'
+import Navbar from './components/Navbar'
 
-const LocaleLayout = ({
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'Web Application',
+  description: 'A web application with authentication',
+}
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}) => {
-  const locale = getLocaleOnServer()
+}) {
   return (
-    <html lang={locale ?? 'en'} className="h-full">
-      <body className="h-full">
-        <div className="overflow-x-auto">
-          <div className="w-screen h-screen min-w-[300px]">
+    <html lang="en">
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar />
+          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             {children}
-          </div>
+          </main>
         </div>
       </body>
     </html>
   )
 }
-
-export default LocaleLayout

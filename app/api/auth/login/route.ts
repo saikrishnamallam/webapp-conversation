@@ -36,12 +36,15 @@ export async function POST(request: Request) {
             }, { status: 401 });
         }
 
+        console.log('user is: ', user)
+
         // Generate JWT token
         const token = jwt.sign(
             {
                 userId: user.id,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                isAdmin: user.isAdmin
             },
             JWT_SECRET,
             { expiresIn: '1d' }
@@ -70,6 +73,11 @@ export async function POST(request: Request) {
             maxAge: 60 * 60 * 24, // 1 day in seconds
             path: '/'
         });
+
+        // response.cookies.set({
+        //     name: 'user_id',
+        //     value: user.id
+        // })
 
         console.log('Set auth_token cookie with token');
         return response;

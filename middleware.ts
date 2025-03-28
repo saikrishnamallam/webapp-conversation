@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     // Define public paths that don't require authentication
     const isPublicPath = path === '/login' ||
         path === '/register' ||
-        path === '/' ||
+        // path === '/' ||
         path === '/debug' || // Add debug page as public
         path === '/api/auth/login' ||
         path === '/api/auth/register' ||

@@ -62,13 +62,14 @@
     "scheduler": "^0.23.0",
     "server-only": "^0.0.1",
     "swr": "^2.1.0",
-    "typescript": "4.9.5",
+    "typescript": "^5.8.2",
     "use-context-selector": "^1.4.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "0.36.0",
     "@faker-js/faker": "^7.6.0",
+    "@prisma/client": "^6.5.0",
     "@tailwindcss/typography": "^0.5.9",
     "@types/bcrypt": "^5.0.2",
     "@types/js-cookie": "^3.0.3",
@@ -78,6 +79,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "lint-staged": "^13.2.2",
     "postcss": "^8.4.21",
+    "prisma": "^6.5.0",
     "tailwindcss": "^3.2.7",
     "ts-node": "^10.9.2"
   },

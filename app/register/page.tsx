@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -11,8 +11,31 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false)
+
+    const mountFn = async () => {
+        const response = await (await fetch('http://localhost:3000/api/auth/checkadmin')).json()
+        // const response = await fetch('/api/auth/checkadmin')
+
+        console.log("response is: ", response.data)
+        // console.log()
+        if (response.data == false) {
+            router.replace('/')
+        }
+
+        setLoading(false)
+    }
+
+    useEffect(() => {
+
+        console.log("Inside mounting useEffect register")
+
+        mountFn();
+
+    }, [])
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,12 +78,22 @@ export default function RegisterPage() {
         }
     };
 
+
+    if (loading) {
+        return (
+            <div>
+                ...Loading
+            </div>
+        )
+    }
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        // <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 border-4 border-red-400">
+        <div className="h-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 ">
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Create a new account
+                        Create a new user account
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
                         Or{' '}

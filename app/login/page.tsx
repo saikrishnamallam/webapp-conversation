@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -14,6 +14,24 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [debugInfo, setDebugInfo] = useState<string>('');
+
+    useEffect(() => {
+        // Fetch user information to verify we're authenticated
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('/api/auth/user');
+                if (response.ok) {
+                    const data = await response.json();
+                    // setUser(data.user);
+                    router.replace('/chat')
+                }
+            } catch (error) {
+                console.error('Error checking auth:', error);
+            }
+        };
+
+        checkAuth();
+    }, []);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,14 +55,14 @@ export default function LoginPage() {
             });
 
             const data = await response.json();
-            setDebugInfo(`Response status: ${response.status}, Success: ${data.success}`);
+            // setDebugInfo(`Response status: ${response.status}, Success: ${data.success}`);
 
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
 
             // Check if auth_token cookie exists
-            setDebugInfo(`Login successful, user: ${JSON.stringify(data.user)}. Redirecting to ${redirectUrl}...`);
+            // setDebugInfo(`Login successful, user: ${JSON.stringify(data.user)}. Redirecting to ${redirectUrl}...`);
 
             // Use window.location for a hard refresh instead of router.push
             window.location.href = redirectUrl;
@@ -58,18 +76,19 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        // <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="h-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                         Sign in to your account
                     </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
+                    {/* <p className="mt-2 text-center text-sm text-gray-600">
                         Or{' '}
                         <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
                             create a new account
                         </Link>
-                    </p>
+                    </p> */}
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

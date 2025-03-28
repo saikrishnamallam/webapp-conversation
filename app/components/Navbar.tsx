@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import logo from '../../assets/logo-sbnp.png'
 
 type User = {
     id: number;
@@ -15,6 +17,7 @@ export default function Navbar() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false)
 
     useEffect(() => {
         // Check if user is authenticated
@@ -26,6 +29,12 @@ export default function Navbar() {
                         'Content-Type': 'application/json',
                     },
                 });
+
+                const check = await (await fetch('/api/auth/checkadmin')).json()
+                // const response = await fetch('/api/auth/checkadmin')
+
+                console.log("response in Navbar is: ", check)
+                setIsUserAdmin(check)
 
                 if (response.ok) {
                     const data = await response.json();
@@ -40,6 +49,7 @@ export default function Navbar() {
                 setLoading(false);
             }
         };
+
 
         checkAuth();
     }, []);
@@ -66,19 +76,25 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-white shadow-md">
+        <nav className="bg-white shadow-md sticky top-0">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/" className="text-xl font-bold text-blue-600">
-                                Web App
+                                {/* Web App */}
+                                <Image
+                                    src={logo}
+                                    alt="Company Logo"
+                                    width={200}
+                                    height={100}
+                                />
                             </Link>
                         </div>
                         <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-                            <Link href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+                            {/* <Link href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
                                 Home
-                            </Link>
+                            </Link> */}
                             {/* Add other nav links here */}
                         </div>
                     </div>
@@ -119,12 +135,13 @@ export default function Navbar() {
                                 <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900">
                                     Sign in
                                 </Link>
-                                <Link
-                                    href="/register"
-                                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-                                >
-                                    Sign up
-                                </Link>
+                                {isUserAdmin &&
+                                    <Link
+                                        href="/register"
+                                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+                                    >
+                                        Sign up
+                                    </Link>}
                             </div>
                         )}
                     </div>

@@ -15,7 +15,7 @@ export default function ChatPage() {
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data.user);
-                    console.log('User authenticated:', data.user);
+                    // console.log('User authenticated:', data.user);
                 } else {
                     console.error('Authentication failed:', response.status);
                     // If we get here, middleware should have already redirected
@@ -36,7 +36,8 @@ export default function ChatPage() {
     }
 
     return (
-        <div className="min-h-screen">
+        // <div className="min-h-screen">
+        <div className="flex-1 flex overflow-y-auto">
             {user ? (
                 <Main params={{}} />
             ) : (

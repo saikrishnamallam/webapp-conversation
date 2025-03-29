@@ -2,7 +2,6 @@ import { type NextRequest } from 'next/server'
 import { ChatClient } from 'dify-client'
 import { v4 } from 'uuid'
 import { API_KEY, API_URL, APP_ID } from '@/config'
-import { db } from '@/utils/dbPrismaClient'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 
@@ -18,39 +17,42 @@ interface currPayload {
 }
 
 export const getInfo = async (request: NextRequest) => {
-  const sessionId = request.cookies.get('session_id')?.value || v4()
+  try {
+    const sessionId = request.cookies.get('session_id')?.value || v4()
+    const authCookie = cookies().get('auth_token')?.value
 
-  const authCookie = cookies().get('auth_token')?.value
-  // const authCookie = request.cookies.get('auth_token')?.value || ''
+    let decoded: { userId: string, isAdmin: boolean } | currPayload = {
+      userId: '',
+      isAdmin: false,
+    };
 
-  // console.log("authCookie is: ", authCookie)
+    if (authCookie) {
+      try {
+        decoded = jwt.verify(authCookie, JWT_SECRET) as currPayload
+      } catch (error) {
+        console.error('JWT verification error:', error);
+        // Continue with default decoded values
+      }
+    }
 
-  let decoded: { userId: string, isAdmin: boolean } | currPayload = {
-    userId: '',
-    isAdmin: false,
-  };
+    const currentUserId = decoded.userId || ''
+    const isUserAdmin = decoded.isAdmin || false
+    const userPrefix = currentUserId ? `${currentUserId}_${APP_ID}:` : `anonymous_${APP_ID}:`
+    const user = userPrefix
 
-  // const currentUserId = request.cookies.get('auth')?.value || ''
-  if (authCookie) {
-    decoded = jwt.verify(authCookie || '', JWT_SECRET) as currPayload
-  }
-
-  // console.log("decoded isAdmin is: ", decoded.isAdmin)
-  const currentUserId = decoded.userId
-  // const currentUserId = 'user'
-
-  const isUserAdmin = decoded.isAdmin
-  // const isUserAdmin = false
-  // console.log('isUserAdmin in common is: ', isUserAdmin)
-  const userPrefix = `${currentUserId}_${APP_ID}:`
-  // const userPrefix = `user_${APP_ID}:`
-  // const user = userPrefix + sessionId
-  const user = userPrefix
-  // const user = userPrefix + sessionId
-  return {
-    sessionId,
-    user,
-    isUserAdmin
+    return {
+      sessionId,
+      user,
+      isUserAdmin
+    }
+  } catch (error) {
+    console.error('Error in getInfo:', error);
+    // Return default values if something goes wrong
+    return {
+      sessionId: v4(),
+      user: `anonymous_${APP_ID}:`,
+      isUserAdmin: false
+    }
   }
 }
 
@@ -58,4 +60,7 @@ export const setSession = (sessionId: string) => {
   return { 'Set-Cookie': `session_id=${sessionId}` }
 }
 
-export const client = new ChatClient(API_KEY, API_URL || undefined)
+// Only create the client if API_KEY and API_URL are available
+export const client = typeof API_KEY === 'string' && API_KEY
+  ? new ChatClient(API_KEY, API_URL || undefined)
+  : null;

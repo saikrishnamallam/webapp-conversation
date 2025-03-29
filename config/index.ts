@@ -7,7 +7,7 @@ export const API_KEY = `${process.env.APP_KEY}`
 export const API_URL = `${process.env.API_URL}`
 export const APP_INFO: AppInfo = {
   // title: 'Chat APP',
-  title: 'SBNP BOT',
+  title: 'Smart knowledge base di SBNP',
   description: '',
   copyright: '',
   privacy_policy: '',

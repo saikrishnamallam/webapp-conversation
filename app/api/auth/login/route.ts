@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getUserByEmail } from '@/utils/db';
+import { setUserAdmin } from '../isUserAdmin';
 
 // Use a consistent JWT secret - use env variable or fallback if not set
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here_change_it_in_production';
+const ADMIN_EMAIL = 'saikrishnamallam@live.com'; // The admin email address
 
 export async function POST(request: Request) {
     try {
@@ -36,21 +38,26 @@ export async function POST(request: Request) {
             }, { status: 401 });
         }
 
-        console.log('user is: ', user)
+        // Check if user is admin
+        const isAdmin = email === ADMIN_EMAIL;
 
-        // Generate JWT token
+        // Update global admin state
+        setUserAdmin(isAdmin);
+
+        // Generate JWT token with isAdmin flag
         const token = jwt.sign(
             {
                 userId: user.id,
                 email: user.email,
                 name: user.name,
-                isAdmin: user.isAdmin
+                isAdmin: isAdmin
             },
             JWT_SECRET,
             { expiresIn: '1d' }
         );
 
         console.log('Generated token:', token.substring(0, 20) + '...');
+        console.log('User is admin:', isAdmin);
 
         // Create the response
         const response = NextResponse.json({
@@ -59,7 +66,8 @@ export async function POST(request: Request) {
             user: {
                 id: user.id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                isAdmin: isAdmin
             }
         });
 

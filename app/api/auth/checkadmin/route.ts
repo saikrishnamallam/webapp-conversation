@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isUserAdmin } from "../isUserAdmin";
-import { getInfo } from "../../utils/common";
+import { getInfo } from "@/app/api/utils/common";
 
 
 export async function GET(request: NextRequest) {

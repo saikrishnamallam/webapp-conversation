@@ -71,7 +71,7 @@ export async function getUserByEmail(email: string) {
 }
 
 // Create a new user
-export async function createUser(name: string, email: string, hashedPassword: string) {
+export async function createUser(name: string, email: string, hashedPassword: string, isAdmin: boolean = false) {
     // const result = await query(
     //     'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
     //     [name, email, hashedPassword]
@@ -81,7 +81,8 @@ export async function createUser(name: string, email: string, hashedPassword: st
         data: {
             name: name,
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            isAdmin: isAdmin
         }
     })
 

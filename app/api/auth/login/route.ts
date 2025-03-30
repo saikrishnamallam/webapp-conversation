@@ -6,7 +6,6 @@ import { setUserAdmin } from '../isUserAdmin';
 
 // Use a consistent JWT secret - use env variable or fallback if not set
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here_change_it_in_production';
-const ADMIN_EMAIL = 'saikrishnamallam@live.com'; // The admin email address
 
 export async function POST(request: Request) {
     try {
@@ -38,8 +37,8 @@ export async function POST(request: Request) {
             }, { status: 401 });
         }
 
-        // Check if user is admin
-        const isAdmin = email === ADMIN_EMAIL;
+        // Check if user is admin from the database column
+        const isAdmin = Boolean(user.isAdmin);
 
         // Update global admin state
         setUserAdmin(isAdmin);
@@ -81,11 +80,6 @@ export async function POST(request: Request) {
             maxAge: 60 * 60 * 24, // 1 day in seconds
             path: '/'
         });
-
-        // response.cookies.set({
-        //     name: 'user_id',
-        //     value: user.id
-        // })
 
         console.log('Set auth_token cookie with token');
         return response;

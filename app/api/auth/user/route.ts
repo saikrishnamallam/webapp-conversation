@@ -44,7 +44,7 @@ export async function GET() {
                     id: user.id,
                     name: user.name,
                     email: user.email,
-                    isAdmin: decoded.isAdmin || false
+                    isAdmin: Boolean(user.isAdmin)
                 }
             });
         } catch (tokenError) {

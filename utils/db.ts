@@ -2,16 +2,16 @@ import mysql from 'mysql2/promise';
 import { db } from './dbPrismaClient';
 
 // Create a connection pool
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    port: parseInt(process.env.MYSQL_PORT || '3306'),
-    database: process.env.MYSQL_DATABASE,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+// const pool = mysql.createPool({
+//     host: process.env.MYSQL_HOST,
+//     port: parseInt(process.env.MYSQL_PORT || '3306'),
+//     database: process.env.MYSQL_DATABASE,
+//     user: process.env.MYSQL_USER,
+//     password: process.env.MYSQL_PASSWORD,
+//     waitForConnections: true,
+//     connectionLimit: 10,
+//     queueLimit: 0
+// });
 
 // Initial database setup - create tables if they don't exist
 export async function initDatabase() {
@@ -92,4 +92,4 @@ export async function createUser(name: string, email: string, hashedPassword: st
 // Initialize the database on module import
 initDatabase().catch(console.error);
 
-export default pool; 
+// export default pool; 

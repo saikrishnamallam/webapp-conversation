@@ -7,6 +7,8 @@ import { cookies } from 'next/headers'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here_change_it_in_production';
 
+export const dynamic = "force-dynamic";
+
 interface currPayload {
   userId: string,
   email: string,
@@ -18,8 +20,10 @@ interface currPayload {
 
 export const getInfo = async (request: NextRequest) => {
   try {
-    const sessionId = request.cookies.get('session_id')?.value || v4()
+    // const sessionId = request.cookies.get('session_id')?.value || v4()
+    const sessionId = cookies().get('session_id')?.value || v4()
     const authCookie = cookies().get('auth_token')?.value
+    // const authCookie = request.cookies.get('auth_token')?.value
 
     let decoded: { userId: string, isAdmin: boolean } | currPayload = {
       userId: '',

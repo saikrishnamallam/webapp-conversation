@@ -88,7 +88,8 @@ export default function RegisterPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center fixed inset-0 bg-white">
+            // <div className="min-h-screen flex items-center justify-center fixed inset-0 bg-white">
+            <div className="h-full flex items-center justify-center fixed inset-0 bg-white">
                 <div className="text-center">
                     <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-[#7b2a20] border-[#7b2a20] border-t-transparent" role="status">
                         <span className="sr-only">Loading...</span>

@@ -74,6 +74,8 @@ const Answer: FC<IAnswerProps> = ({
   const { id, content, feedback, agent_thoughts, workflowProcess } = item
   const isAgentMode = !!agent_thoughts && agent_thoughts.length > 0
 
+  // console.log("content is: ", content)
+
   const { t } = useTranslation()
 
   /**

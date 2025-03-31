@@ -37,11 +37,12 @@ export default function ChatPage() {
 
     return (
         // <div className="min-h-screen">
-        <div className="flex-1 flex overflow-y-auto">
+        <div className="flex-1 flex flex-col overflow-y-auto">
             {user ? (
                 <Main params={{}} />
             ) : (
-                <div className="min-h-screen flex items-center justify-center">
+                // <div className="min-h-screen flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center">
                     Not authenticated. You should be redirected to login.
                 </div>
             )}

@@ -13,7 +13,7 @@ export async function POST() {
             name: 'auth_token',
             value: '',
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            // secure: process.env.NODE_ENV === 'production',
             maxAge: 0, // Expire immediately
             path: '/'
         });

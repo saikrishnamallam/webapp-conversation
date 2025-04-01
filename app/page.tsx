@@ -1,17 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
 
 
   // console.log("isUserAdmin is: ", isUserAdmin)
 
-  const response = await (await fetch('http://localhost:3000/api/auth/checkadmin', { credentials: 'include' })).json()
-  const isUserAdmin = response.data
+  // const response = await (await fetch('http://localhost:3000/api/auth/checkadmin', { credentials: 'include' })).json()
+  // const isUserAdmin = response.data
 
-  console.log("response is: ", response)
-  console.log("isUserAdmin in base Page is: ", isUserAdmin)
-  // const isUserAdmin = false;
+  // console.log("response is: ", response)
+  // console.log("isUserAdmin in base Page is: ", isUserAdmin)
+  const isUserAdmin = false;
 
   return (
     <div className="relative overflow-hidden">
@@ -35,7 +37,7 @@ export default async function HomePage() {
                   Get Started
                 </Link>
               </div>
-              {isUserAdmin == true ?
+              {isUserAdmin ?
                 <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
                   <Link
                     href="/register"
